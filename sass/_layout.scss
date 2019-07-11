@@ -1,0 +1,107 @@
+.container { // overall background waarin alles wordt geplaatst. 
+    max-width: 120rem;
+    margin: 8rem auto;
+    background-color: var(--color-grey-light-1);
+    box-shadow: var(--shadow-dark);
+
+    min-height: 50rem;
+
+    @media only screen and (max-width: $bp-largest) { // 1200px
+        // only remove the pink margin on the top of the page
+        margin: 0;
+        // to make sure the pink border on the right doesnt appear when the screen gets 1100px or smaller. because then the font-size is defined at 8px so the width of the container is no longer 1200px (120rem) but 120*8px = 960px
+        max-width: 100%;
+        width: 100%;
+    }
+}
+
+.header {
+    font-size: 1.4rem;
+    height: 7rem;
+    background-color: var(--color-white);
+    border-bottom: var(--line);
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    @media only screen and (max-width: $bp-smallest) { // 500px
+        // to move the search bar below the other header items set flex-wrap to flex and adjust some properties in the search item itself (in the components) 
+        flex-wrap: wrap;
+        align-content: space-around; // to put some space above, between and below the header elements which are now displayed on 2 lines. 
+        height: 11rem;
+    }
+}
+
+.content {
+    display: flex; // parent of .side-nav and .hotel-view
+
+    @media only screen and (max-width: $bp-medium) { // max 900px
+        // change the direction to column. That will place the sidebar on top of the hotel-view part. (The content is divided by the sidebar and the hotel-view flex items) 
+        flex-direction: column;
+    }
+}
+
+.sidebar {
+    background-color: var(--color-grey-dark-1);
+
+    flex: 0 0 18%; // dont grow, dont shrink, width 18%
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.hotel-view {
+    background-color: var(--color-white);
+
+    flex: 1; // take up as much space as possible: over all the available width
+}
+
+.detail {
+    font-size: 1.4rem;
+    display: flex;
+    padding: 4.5rem;
+    background-color: var(--color-grey-light-1);
+    border-bottom: var(--line);
+
+    @media only screen and (max-width: $bp-medium) { // 900px
+        // smaller padding now:
+        padding: 3rem;
+    }
+
+    @media only screen and (max-width: $bp-small) { // 600px
+        // to put the description and the user-review items on top of each other: 
+        flex-direction: column;
+    }
+    // both media queries will apply so put the smallest one at the bottom (for if there is something conflicting)  
+}
+
+.description {
+    background-color: var(--color-white);
+    box-shadow: var(--shadow-light);
+    padding: 3rem;
+    // ususally when the width is set using a %, the grow and shrink properties are set to 0:
+    flex: 0 0 60%;
+    margin-right: 4.5rem;
+
+    @media only screen and (max-width: $bp-medium) { // 900px
+        // smaller padding now as well and smaller margin:
+        padding: 2rem;
+        margin-right: 3rem;
+    }
+
+    @media only screen and (max-width: $bp-small) { // 600px
+        margin-right: 0;
+        margin-bottom: 3rem;
+    }
+}
+
+.user-reviews {
+    // to occupy the remaining space besides .description:
+    flex: 1;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}

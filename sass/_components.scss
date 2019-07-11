@@ -1,0 +1,646 @@
+// LOGO
+.logo {
+    height: 3.25rem;
+    margin-left: 2rem;
+}
+
+// SEARCH
+.search {
+    flex: 0 0 40%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    @media only screen and (max-width: $bp-smallest) {
+        // to move the search bar below the other items in the header. Set the search bar to the last position and to a width of 100%. Also, in the header set the flex-wrap property to wrap so the items in the header that dont fit on the first line anymore, will move to the line below. 
+        order: 1;
+        flex: 0 0 80%; // width should be 100%, it shouldnt shrink and shouldnt grow
+        background-color: var(--color-primary-light, .2); // by setting a background-color on the entire search instead of just the input element, it gets a bit more centered. 
+    }
+
+    &__input {
+        // input doesnt inherit font-family and size of the global document automatically
+        font-family: inherit; 
+        font-size: inherit;
+        color: inherit;
+        background-color: var(--color-grey-light-2);
+        border: none;
+        padding: .7rem 2rem;
+        border-radius: 100px;
+        width: 90%;
+        transition: all .2s; // when focused, the search input bar becomes 100% of its width which is 40% of the available space in the header 
+        margin-right: -3.25rem; // to make the button icon move on top of the input. 
+        
+        @media only screen and (max-width: $bp-smallest) {
+        order: 1;
+        flex: 0 0 80%; 
+        background-color: var(--color-primary-light, .2);
+        }
+
+        &:focus {
+            outline: none;
+            width: 100%;
+            background-color: var(--color-grey-light-3);
+            
+            @media only screen and (max-width: $bp-smallest) {
+            order: 1;
+            flex: 0 0 80%; 
+            background-color: var(--color-primary-light, .2);
+            }
+        }
+
+        &::-webkit-input-placeholder {
+            font-weight: 100;
+            color: var(--color-grey-light-1);
+        }
+    }
+
+    &__input:focus + &__button { // button is sibling of input, therefore + 
+        background-color: var(--color-grey-light-3);
+    }
+
+    &__button {
+        border: none;
+        background-color: var(--color-grey-light-2);
+
+        &:focus {
+            outline: none;
+        }
+
+        &:active {
+            transform: translateY(2px);
+        }
+    }
+
+    &__icon {
+        height: 2rem;
+        width: 2rem;
+        fill: var(--color-grey-dark-3);
+    }
+}
+
+
+////////////////////////////////////////
+// USER NAVIGATION
+.user-nav {
+    align-self: stretch;
+    
+    display: flex;
+    align-items: center;
+
+    & > * { // only select the direct children
+        padding: 0 2rem;
+        cursor: pointer;
+        height: 100%;
+        display: flex;
+        align-items: center;
+    }
+
+    & > *:hover {
+        background-color: var(--color-grey-light-2);
+    }
+
+    &__icon-box {
+        position: relative;
+    }
+
+    &__icon {
+        height: 2.25rem;
+        width: 2.25rem;
+        fill: var(--color-grey-dark-2);
+    }
+
+    &__notification {
+        font-size: .8rem;
+        height: 1.75rem;
+        width: 1.75rem;
+        border-radius: 50%;
+        background-color: var(--color-primary);
+        color: var(--color-white);
+        position: absolute;
+        top: 1.5rem;
+        right: 1.1rem;
+        // flexbox also works for centering text. 
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    &__user-photo {
+        height: 3.75rem;
+        border-radius: 50%;
+        margin-right: 1rem;
+    }
+
+}
+
+////////////////////////////////////////
+// SIDE NAVIGATION
+.side-nav {
+    font-size: 1.4rem;
+    list-style: none;
+    margin-top: 3.5rem;
+
+    @media only screen and (max-width: $bp-medium) { // 900px
+        // to display all of the items next to each other set parent to flex. 
+        display: flex;
+        margin: 0;
+    }
+
+    &__item {
+        position: relative;
+
+        &:not(:last-child) {
+            margin-bottom: .5rem;
+
+            @media only screen and (max-width: $bp-medium) { // 900px
+                // to remove the margin from the bottom:
+                margin: 0;
+            }
+        }
+
+        @media only screen and (max-width: $bp-medium) { // 900px
+            // to display all the items over the full width of the page, so 1/4 for each item. Set flex to 1. so all the items get the ability to grow as much as they can. Since they all have the same flex value, they will all occupy the same width:
+            flex: 1;
+        }
+    }
+    // to position the ::before pseudo element, the parent (&__item) element has to be positioned relative.  
+    &__item::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 3px;
+        background-color: var(--color-primary);
+        // ScaleY is set to (0) to make the before:: pseudo element invisible before hover state. There it's set to scale(1) to make it visible in it's predined width (3px)  
+        transform: scaleY(0);
+        transition: transform .2s,
+                    width .4s cubic-bezier(1,0,0,1) .2s,
+                    background-color .1s;
+                    // this way the animation has different stages. First the transform happens and then the width after a delay of .2s. 
+    }
+    // the first item with class item--active is always displayed in hover state:
+    &__item:hover::before,
+    &__item--active::before { 
+        transform: scaleY(1);
+        width: 100%;
+    }
+
+    &__item:active::before {
+        background-color: var(--color-primary-light);
+    }
+
+    &__link:link,
+    &__link:visited {
+        color: var(--color-grey-light-1);
+        text-decoration: none;
+        text-transform: uppercase;
+        display: block;
+        padding: 1.5rem 3rem;
+        position: relative;
+        z-index: 10; // only works with position specified
+
+        display: flex;
+        align-items: center;
+
+        @media only screen and (max-width: $bp-medium) { // 900px
+            // to display the text of the links in the middle of the side-nav__items:
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        @media only screen and (max-width: $bp-small) {
+            // to place the icons on top of the text in the nav items
+            flex-direction: column;
+            padding: 1.5rem .5rem;
+        }
+    }
+
+    &__icon {
+        width: 1.75rem;
+        height: 1.75rem;
+        margin-right: 2rem;
+        fill: currentColor; // the color of the current element or the parent. if you set a color on the hover cklass of the link, the icon color will also change to this color. 
+
+        @media only screen and (max-width: $bp-small) {
+            margin-right: 0;
+            margin-bottom: .7rem;
+            width: 1.5rem;
+            height: 1.5rem;
+        }
+    }
+}
+
+////////////////////////////////////////
+// LEGAL TEXT
+.legal {
+    font-size: 1.2rem;
+    color: var(--color-grey-light-4);
+    text-align: center;
+    padding: 2.5rem;
+
+    @media only screen and (max-width: $bp-medium) { // 900px
+        // remove the legal text from the sidebar
+        display: none;
+    }
+}
+
+////////////////////////////////////////
+// GALLERY
+.gallery {
+    display: flex;
+
+    &__photo {
+        width: 100%; // to make responsive design, always define the height and width of images in %
+        display: block; // to avoid having a small space underneath the image, the image should always be displayed as a block or inline block element. 
+    }
+}
+
+////////////////////////////////////////
+// HOTEL OVERVIEW
+.overview {
+    display: flex;
+    align-items: center;
+    border-bottom: var(--line);
+
+    &__heading {
+        font-size: 2.25rem;
+        font-weight: 300;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        padding: 1.5rem 3rem;
+
+        @media only screen and (max-width: $bp-small) {
+            font-size: 1.8rem;
+            padding: 1.25rem 2rem;
+        }
+    }
+
+    &__stars {
+        // to create the big white space between the stars and the location. This trick is widely used with flexbox 
+        margin-right: auto; 
+        // svg elements behave like inline elements, a bit like text. So they have a little bit of white space below each of the starts. To remove this, set the parent element to flex so all the stars will become flex items and then the white space below the stars is gone. 
+        display: flex; 
+    }
+
+    &__icon-star,
+    &__icon-location {
+        width: 1.75rem;
+        height: 1.75rem;
+        fill: var(--color-primary);
+    }
+
+    &__location {
+        font-size: 1.2rem;
+        display: flex;
+        vertical-align: center;
+    }
+
+    &__icon-location {
+        margin-right: .5rem;
+    }
+
+    &__rating {
+        background-color: var(--color-primary);
+        color: var(--color-white);
+        margin-left: 3rem;
+        padding: 0 2.25rem;
+        // to make the rating part stretch vertically over the full height the align-items: center; property set in the parent element (.overview) overwrite this property with align-self set to stretch:
+        align-self: stretch;
+        // to align rating and counting on top of each other in the center of the flex-item:
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+
+        @media only screen and (max-width: $bp-small) {
+            padding: 0 1.5rem;
+        }
+    }
+
+    &__rating-average {
+        font-size: 2.25rem;
+        font-weight: 300;
+        margin-bottom: -3px;
+
+        @media only screen and (max-width: $bp-small) {
+            font-size: 1.8rem;
+        }
+    }
+
+    &__rating-count {
+        font-size: .8rem;
+        text-transform: uppercase;
+
+        @media only screen and (max-width: $bp-small) {
+            font-size: .5rem;
+        }
+    }
+}
+
+////////////////////////////////////////
+// BUTTON INLINE
+.btn-inline {
+    border: none;
+    color: var(--color-primary);
+    font-size: inherit;
+    // with currentColor the border will have the same color as the text. It also gets the color of the text in hover state automatically
+    border-bottom: 1px solid currentColor;
+    padding-bottom: 2px;
+    display: inline-block;
+    background-color: transparent;
+    cursor: pointer;
+    transition: all .2s;
+    
+    @media only screen and (max-width: $bp-smallest) { // 600px
+    margin-top: 2rem;
+
+    & span {
+        margin-left: 3px;
+        transition: margin-left .2s;
+    }
+
+    &:hover {
+        color: var(--color-grey-dark-1);
+
+        span {
+            margin-left: 8px;
+        }
+    }
+
+    &:focus {
+        outline: none;
+        animation: pulsate 1s infinite;
+    }
+}
+
+@keyframes pulsate {
+    0% {
+        transform: scale(1);
+        box-shadow: none;
+    }
+
+    50% {
+        transform: scale(1.05);
+        box-shadow: 0 1rem 4rem rgba(0,0,0,.25);
+    }
+
+    100% {
+        transform: scale(1);
+        box-shadow: none;
+    }
+}
+
+////////////////////////////////////////
+// PARAGRAPH
+// the second <p> should have no margin-bottom. Since it isnt the last child, but the last of type <p> :not(last-of-type) can be used:
+.paragraph:not(:last-of-type) {
+    margin-bottom: 2rem;
+}
+
+////////////////////////////////////////
+// LIST
+.list {
+    list-style: none;
+    margin: 3rem 0;
+    padding: 3rem 0;
+    border-top: var(--line);
+    border-bottom: var(--line);
+
+    display: flex;
+    // to make sure that the list items appear on a new line when there is not enough space flex-wrap is used. It will just align the list items right next to each other with no space in between. This is fixed by setting the width of each list item to 50%.
+    flex-wrap: wrap;
+
+    &__item {
+        flex: 0 0 50%;
+        margin-bottom: .7rem;
+    }
+
+    &__item::before {
+        content: "";
+        display: inline-block;
+        height: 1rem;
+        width: 1rem;
+        margin-right: .7rem;
+
+        // it is very difficult to use a sprite image in css. Its much easier to use the svg itself.  
+        // Older browsers. By including it as a background image, the color of the icons can't be changed. To change the color of the icons, the mask method must be used. This doesnt work on older browsers yet. 
+
+        // later add a feature query: if the mask property is supported then use mask, is not use background image
+        background-image: url(../img/chevron-thin-right.svg);
+        background-size: cover;
+
+        //Newer browsers - masks
+        // A mask defines an area where it's possible to look trough the element and see whats behind that element. So set the background color to a solid color, then use the icon as a mask, so its possible to look trough that mask and see the background color in the area of the icon. The rest will be covered. 
+
+        // below is whats called a feature query. It says. If webkit-mask is supported or mask, use the method defined in the {}, if not, use the old version as written above.  
+        @supports (-webkit-mask-image: url()) or (mask-image: url()) {
+            background-color: var(--color-primary);
+            -webkit-mask-image: url(../img/chevron-thin-right.svg);
+            // whithout the mask-size set to cover it will look different because the icon is actually larger than 1 rem but with mask size what behaves like background size, cover can be used: 
+            -webkit-mask-size: cover;
+            mask-image: url(../img/chevron-thin-right.svg);
+            // whithout the prefix for if all the other browsers start supporting mask as well:
+            mask-size: cover;
+            background-image: none; // whithout this, the icons will be black instead of pink
+        }
+        
+    }
+}
+
+////////////////////////////////////////
+// RECOMMEND
+.recommend {
+    font-size: 1.3rem;
+    color: var(--color-grey-dark-3);
+
+    display: flex;
+    align-items: center;
+
+    &__count { // the text
+        margin-right: auto; // to make the white space between the text and the images (it pushes the recommend__friends box all the way to the right) 
+    }
+
+    &__friends {
+        display: flex;
+    }
+
+    &__photo {
+        // the box-sizing of all the elements is set to border-box. border-box includes the border and the padding into the width and the height of the element. In this situation, the border needs to be added on top of the height and the width of the image so the box-sizing property needs to be set back to its default value (content-box). 
+        box-sizing: content-box;
+        height: 4rem;
+        width: 4rem;
+        border-radius: 50%;
+        border: 3px solid var(--color-white);
+
+        &:not(:last-child) {
+            margin-right: -2rem; // to make the images overlap
+        }
+    }
+}
+
+////////////////////////////////////////
+// REVIEWS
+.review {
+    background-color: var(--color-white); 
+    box-shadow: var(--shadow-light);
+    padding: 3rem;
+    margin-bottom: 3.5rem;
+    position: relative;
+    overflow: hidden;
+
+    @media only screen and (max-width: $bp-medium) { // 900px
+        // also decrease the padding and margin here:
+        padding: 2rem;
+        margin-bottom: 3rem;
+    }
+
+    @media only screen and (max-width: $bp-small) { // 600px
+        // to display the image, the name, the date and the score on the same line as well but centered
+        margin-bottom: 0;
+    }
+
+    &__text {
+        margin-bottom: 2rem;
+        z-index: 10;
+        position: relative;
+    }
+
+    &__user {
+        display: flex;
+        align-items: center;
+
+        @media only screen and (max-width: $bp-small) { // 600px
+            // to display the image, the name, the date and the score on the same line as well but centered
+            justify-content: center;
+        }
+    }
+
+    &__photo {
+        height: 4.5rem;
+        width: 4.5rem;
+        border-radius: 50%;
+        margin-right: 1.5rem;
+
+        @media only screen and (max-width: $bp-small) { // 600px
+            // to display the image, the name, the date and the score on the same line as well but centered
+            margin-right: 0;
+        }
+    }
+
+    &__user-box {
+        margin-right: auto;
+
+        @media only screen and (max-width: $bp-small) { // 600px
+            // to display the image, the name, the date and the score on the same line as well but centered
+            margin: 0 3rem;
+        }
+    }
+
+    &__user-name {
+        font-size: 1.1rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        margin-bottom: .4rem;
+    }
+
+    &__user-date {
+        font-size: 1rem;
+        color: var(--color-grey-dark-3);
+    }
+
+    &__rating {
+        color: var(--color-primary);
+        font-size: 2.2rem;
+        font-weight: 300;
+    }
+
+    &::before {
+        content: "\201C";
+        position: absolute;
+        top: -2.75rem;
+        left: -1rem;
+        line-height: 1;
+        font-size: 20rem;
+        color: var(--color-grey-light-2);
+        font-family: sans-serif;
+        z-index: 1;
+    }
+}
+
+////////////////////////////////////////
+// CALL TO ACTION
+.cta {
+    padding: 3.5rem 0;
+    text-align: center;
+
+    @media only screen and (max-width: $bp-medium) { // 900px
+        // also decrease the padding here:
+        padding: 2.5rem 0;
+    }
+
+    &__book-now {
+        font-size: 2rem;
+        font-weight: 300;
+        text-transform: uppercase;
+        margin-bottom: 2.5rem;
+        
+         @media only screen and (max-width: $bp-smallest) { // 600px
+            // also decrease the padding here:
+            font-size: 1rem;
+            margin: 0 2rem;
+        }
+    }
+}
+
+////////////////////////////////////////
+// CALL TO ACTION
+.btn {
+    font-size: 1.5rem;
+    font-weight: 300;
+    text-transform: uppercase;
+    border-radius: 100px;
+    border: none;
+    background-image: linear-gradient(to right, var(--color-primary-light), var(--color-primary-dark));
+    color: var(--color-white);
+    position: relative;
+    overflow: hidden; // the invisble button text is outside the button (position absolute) and so it's an overflow element and if overflow is set to hidden it will simply dissapear
+    cursor: pointer;
+
+    & > * { // select all of the child elements
+        display: inline-block; 
+        height: 100%;
+        width: 100%;
+        transition: all .2s; // transition doesnt work for background images so it also doesnt work for gradients. 
+    }
+
+    &__visible { // it's a span element, so in order to use padding make it inline-block. With the & > * selector. The padding is going to define the size of the button.
+        padding: 2rem 7.5rem;
+    }
+
+    &__invisible {
+        position: absolute; // to put it outside of the button, above it, so when hovered it can come down. 
+        padding: 2rem 0;
+        left: 0;
+        top: -100%; // it going to move up exactly the size of the element. 
+    }
+
+    &:hover {
+        background-image: linear-gradient(to left, var(--color-primary-light), var(--color-primary-dark));
+    }
+
+    &:hover &__visible {
+        transform: translateY(100%); // brings it 100% of its height down. Dont use top here because it isnt absolute positioned. 
+    }
+
+    &:hover &__invisible {
+        top: 0; // when its mot hovered, the position is at -100%. the position where it would be if its visible is top 0
+    }
+
+    &:focus {
+        outline: none;
+        animation: pulsate 1s infinite;
+    }
+}
+
